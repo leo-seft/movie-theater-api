@@ -21,11 +21,22 @@ router.get("/:id", async (req, res) => {
     res.json(show)
 })
 
-router.put("/:id", async(req, res) => {
+router.put("/:id/available", async(req, res) => {
     const showId = req.params.id;
     let show = await Show.findByPk(showId);
-    show = await show.update(req.body)
+    if (show.available === false){
+        show = await show.update({available: true})
+    }else if(show.available === true){
+        show = await show.update({available: false})
+    }
     res.json(show)
+})
+
+router.get("/:id/users", async (req, res) => {
+    const showId = req.params.id
+    const show = await Show.findByPk(showId)
+    const users = await show.getUsers()
+    res.json(users)
 })
 
 router.delete("/:id", async(req, res) => {
@@ -36,7 +47,7 @@ router.delete("/:id", async(req, res) => {
 })
 
 router.get("/genre/:genre", async (req, res) => {
-    const genre = req.query.genre
+    const genre = req.params.genre
     const shows = await Show.findAll({ where: {genre: genre}});
     res.json(shows)
 })

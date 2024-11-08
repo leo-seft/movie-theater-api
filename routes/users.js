@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router(); 
-const {User} = require("../models/index")
+const {User, Show} = require("../models/index")
 router.use(express.json())
 
 const {check, validationResult} = require("express-validator")
@@ -31,8 +31,8 @@ router.put("/:id/shows/:showId", async (req, res) => {
         res.status(404).json({error: "user not found"})
         return
     }
-    const showId = req.params.id
-    const show = await User.findByPk(showId)
+    const showId = req.params.showId
+    const show = await Show.findByPk(showId)
     if (!show){
         res.status(404).json({error: "show not found"})
         return
